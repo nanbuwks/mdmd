@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Copyright 2018 Tile, Inc.
+# Written by nanbuwks
+# Original (md2jira) is Copyright 2018 Tile, Inc.
 #
 # The MIT License
 #
@@ -28,23 +29,18 @@ import getopt
 import subprocess
 import shutil
 import mistletoe
-from contrib.jira_renderer import JIRARenderer
+from mdmd_renderer import MDMDRenderer
 
 usageString = '%s <markdownfile>' % os.path.basename(sys.argv[0])
 helpString = """
-Convert Markdown (CommonMark) to JIRA wiki markup
--h, --help                        help
--v, --version                     version
--o <outfile>, --output=<outfile>  output file, use '-' for stdout (default: stdout)
+Convert img html tag in the Markdown to Markdown image of Markdown 
 
 If no input file is specified, stdin is used.
 """
 
 """
-Command-line utility to convert Markdown (CommonMark) to JIRA markup.
+Command-line utility to convert img html tag in the Markdown to Markdown image of Markdown.
 
-JIRA markup spec: https://jira.atlassian.com/secure/WikiRendererHelpAction.jspa?section=all
-CommonMark spec: http://spec.commonmark.org/0.28/#introduction
 """
 
 
@@ -61,13 +57,13 @@ class CommandLineParser:
             sys.stderr.write(usageString + '\n')
             sys.exit(1)
 
-        app = MarkdownToJIRA()
+        app = imgMd()
         app.run(optlist, args)
 
 
-class MarkdownToJIRA:
+class imgMd:
     def __init__(self):
-        self.version = "1.0.2"
+        self.version = "1.0.0"
         self.options = {}
         self.options['output'] = '-'
 
@@ -91,7 +87,7 @@ class MarkdownToJIRA:
             sys.exit(1)
 
         with open(args[0], 'r') if len(args) == 1 else sys.stdin as infile:
-            rendered = mistletoe.markdown(infile, JIRARenderer)
+            rendered = mistletoe.markdown(infile, MDMDRenderer)
 
         if self.options['output'] == '-':
             sys.stdout.write(rendered)
