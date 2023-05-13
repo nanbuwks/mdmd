@@ -116,7 +116,8 @@ class MDMDRenderer(BaseRenderer):
     def render_paragraph(self, token):
         if self._suppress_ptag_stack[-1]:
             return '{}'.format(self.render_inner(token))
-        return '{}\n'.format(self.render_inner(token))
+#        return '{}\n'.format(self.render_inner(token))   本来の改行解釈
+        return '{}\n\n'.format(self.render_inner(token))  # qiita のような markdown 内の改行をパラグラフ区切りとして解釈
 
     def render_block_code(self, token):
         self.packages['listings'] = []
@@ -225,3 +226,4 @@ class MDMDRenderer(BaseRenderer):
         template = ('{inner}')
         self.footnotes.update(token.footnotes)
         return template.format(inner=self.render_inner(token))
+
